@@ -12,7 +12,7 @@ extern "C" bool get_bulb_status(int port);
 extern "C" int get_bulb_brightness(int port);
 extern "C" int get_bulb_pwm(int port);
 
-#define PIN_BUTTON 14 // D5 Button
+#define PIN_BUTTON D5
 
 // Wifi configs
 #ifndef STASSID
@@ -21,25 +21,28 @@ extern "C" int get_bulb_pwm(int port);
 #endif
 
 const int pwm_update_interval = 25;
-uint32_t next_pwd_millis = 0;
-int channel_pwm[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-uint32_t next_heap_millis = 0;
-
-Adafruit_PWMServoDriver pwm_driver = Adafruit_PWMServoDriver();
-
 const char* ssid     = STASSID;
 const char* password = STAPSK;
 uint8_t newMACAddress[] = {0x12, 0x0E, 0xA4, 0x37, 0x0D, 0x66};
 
+uint32_t next_pwd_millis = 0;
+uint32_t next_heap_millis = 0;
+
+int channel_pwm[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+Adafruit_PWMServoDriver pwm_driver = Adafruit_PWMServoDriver();
+
+//----------------------------------
+// Micro controller functions
+//----------------------------------
 void setup() {
 	Serial.begin(115200);
 
   wifi_set_macaddr(STATION_IF, &newMACAddress[0]);
-	connect();
+	wifi_connect();
 
   pwm_driver.begin();
-  pwm_driver.setPWMFreq(1000);
+  pwm_driver.setPWMFreq(600);
 
   for(int i=0; i<=15; i++) {
     update_pwd_port(i);
@@ -49,17 +52,14 @@ void setup() {
 }
 
 void loop() {
-  //  Wifi connected?
-  if(is_connected() == false) {
-    connect();
-  }
+  wifi_loop();
 	homekit_loop();
   pwd_loop();
- 
-//	delay(10);
 }
 
-
+//----------------------------------
+// Homekit functions
+//----------------------------------
 void homekit_setup() {
 	accessory_init();
 
@@ -89,14 +89,15 @@ void homekit_loop() {
   
 	if (t > next_heap_millis) {
 		// Show heap info every 10 seconds
-		next_heap_millis = t + 30 * 1000;
+		next_heap_millis = t + 10 * 1000;
 		printf("Free heap: %d, HomeKit clients: %d\n",
 				ESP.getFreeHeap(), arduino_homekit_connected_clients_count());
 	}
 }
 
-
+//----------------------------------
 // PWD functions
+//----------------------------------
 void pwd_loop() {
   const uint32_t t = millis();
 
@@ -132,13 +133,17 @@ void update_pwd_port(int port) {
   pwm_driver.setPWM(port, 0, channel_pwm[port]);
 }
 
-
-
-
-
+//----------------------------------
 // Wifi functions
+//----------------------------------
+void wifi_loop() {
+  if(WiFi.status() != WL_CONNECTED) {
+    Serial.println("Wifi is disconnected!");
+    wifi_connect();
+  }
+}
 
-void connect() {
+void wifi_connect() {
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
@@ -155,8 +160,4 @@ void connect() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-}
-
-bool is_connected() {
-  return WiFi.status() == WL_CONNECTED;
 }
