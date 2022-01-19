@@ -25,7 +25,7 @@ Configure your wifi credentials in switch.ino, build and updload to EPS8266 boar
 homekit_server_config_t config = {
     .accessories = accessories,
 -    .password = "111-11-111",
-+    .password = "123-45-678",
++    .password = "461-33-000",
     .setupId = "ABCD"
 };
 ```
