@@ -751,7 +751,7 @@ void accessory_identify(homekit_value_t _value) {
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_switch, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Switch Controller 16 Channels"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Smart 16 Channels LED Controller"),
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "Rancho P&R Smart Experience by fabiotomio"),
             HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "7890000000002"),
             HOMEKIT_CHARACTERISTIC(MODEL, "16 channels"),
