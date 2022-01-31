@@ -67,9 +67,8 @@ void homekit_setup() {
     
     if (event == ESPBUTTONEVENT_LONGCLICK) {
       printf("Cleanning and rebooting...\n");
-      homekit_storage_reset();
       wifiManager.resetSettings();
-
+      homekit_storage_reset();
       ESP.restart();
     }
   });
