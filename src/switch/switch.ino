@@ -17,9 +17,10 @@ extern "C" int get_bulb_pwm(int port);
 
 const int pwm_update_interval = 1;
 
-uint32_t next_pwd_millis = 0;
-uint32_t next_pwd_log_millis = 0;
-uint32_t next_heap_millis = 0;
+static uint32_t next_heap_millis = 0;
+static uint32_t next_pwd_millis = 0;
+static uint32_t next_pwd_log_millis = 0;
+
 
 int channel_pwm[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -128,12 +129,7 @@ void update_pwd_output(int port) {
       return;
     }
 
-    // senão decrementa a intensidade
-    if(port_pwm - 10 <= 0) {
-        port_pwm = 0;
-    } else {
-        port_pwm = port_pwm - 10;
-    }
+    port_pwm--;
 
   // caso esteja ligada
   } else {
@@ -145,15 +141,10 @@ void update_pwd_output(int port) {
 
     // caso não esteja, dimeriza
     if(port_pwm > bulb_pwd) {
-      if(port_pwm - 10 <= 0) {
-        port_pwm = 0;
-      } else {
-        port_pwm = port_pwm - 10;
-      }
+      port_pwm--;
     } else {
       port_pwm++;
     }
-
   }
 
 
