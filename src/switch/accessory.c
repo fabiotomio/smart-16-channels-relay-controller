@@ -7,49 +7,20 @@
 
 #define PIN_LED_BUILD_IN 16  // Build in LED
 
-const int pwm_brightness[11] = {0, 40, 80, 120, 200, 400, 500, 1000, 2000, 3000, 4095}; 
-
 bool bulbs_status[16]     = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}; 
-int  bulbs_brightness[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-int  bulbs_pwm[16]        = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-
-bool get_bulb_status(int port) {
+bool get_switch_status(int port) {
   if(port <= 15) {
     return bulbs_status[port];  
   } else {
-    printf("get_bulb_status port is invalid: %d\n", port);
+    printf("get_switch_status port is invalid: %d\n", port);
     return false;
   }
-}
-
-int get_bulb_brightness(int port) {
-  if(port <= 15) {
-    return bulbs_brightness[port];  
-  } else {
-    printf("get_bulb_brightness port is invalid: %d\n", port);
-    return 0;
-  }
-}
-
-int get_bulb_pwm(int port) {
-  return bulbs_pwm[port];
 }
 
 void set_status(int port, bool st) {
   bulbs_status[port] = st;
 }
-
-void set_brightness(int port, int brightness) {
-  bulbs_brightness[port] = brightness;
-
-  const int pwm_index = brightness / 10;
-  const int pwm = pwm_brightness[pwm_index];
-  const int pwm_range = (pwm_brightness[pwm_index + 1] - 1 - pwm) / 9;
-
-  bulbs_pwm[port] = pwm + ((brightness % 10) * pwm_range );
-}
-
 
 
 
@@ -57,7 +28,7 @@ void set_brightness(int port, int brightness) {
 // Bulb 1
 //-------------------------------------------------------------------
 
-void bulb_1_on_set(homekit_value_t value) {
+void switch_1_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -65,40 +36,24 @@ void bulb_1_on_set(homekit_value_t value) {
   set_status(0, value.bool_value); 
 }
 
-homekit_value_t bulb_1_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(0));
+homekit_value_t switch_1_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(0));
 }
 
-void switch_1_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(0, value.int_value);
-}
-
-homekit_value_t bulb_1_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(0));
-}
-
-homekit_characteristic_t bulb_1_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_1_on_get,
-  .setter=bulb_1_on_set
-);
-
-homekit_characteristic_t bulb_1_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_1_brightness_get,
-  .setter=switch_1_brightness_set
+homekit_characteristic_t switch_1_status = HOMEKIT_CHARACTERISTIC_(ON, false,
+  .getter=switch_1_on_get,
+  .setter=switch_1_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 1
+// END Switch 1
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 2
 //-------------------------------------------------------------------
 
-void bulb_2_on_set(homekit_value_t value) {
+void switch_2_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -106,40 +61,24 @@ void bulb_2_on_set(homekit_value_t value) {
   set_status(1, value.bool_value); 
 }
 
-homekit_value_t bulb_2_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(1));
+homekit_value_t switch_2_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(1));
 }
 
-void switch_2_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(1, value.int_value);
-}
-
-homekit_value_t bulb_2_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(1));
-}
-
-homekit_characteristic_t bulb_2_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_2_on_get,
-  .setter=bulb_2_on_set
-);
-
-homekit_characteristic_t bulb_2_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_2_brightness_get,
-  .setter=switch_2_brightness_set
+homekit_characteristic_t switch_2_status = HOMEKIT_CHARACTERISTIC_(ON, false,
+  .getter=switch_2_on_get,
+  .setter=switch_2_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 2
+// END Switch 2
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 3
 //-------------------------------------------------------------------
 
-void bulb_3_on_set(homekit_value_t value) {
+void switch_3_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -147,40 +86,24 @@ void bulb_3_on_set(homekit_value_t value) {
   set_status(2, value.bool_value); 
 }
 
-homekit_value_t bulb_3_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(2));
+homekit_value_t switch_3_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(2));
 }
 
-void switch_3_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(2, value.int_value);
-}
-
-homekit_value_t bulb_3_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(2));
-}
-
-homekit_characteristic_t bulb_3_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_3_on_get,
-  .setter=bulb_3_on_set
-);
-
-homekit_characteristic_t bulb_3_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_3_brightness_get,
-  .setter=switch_3_brightness_set
+homekit_characteristic_t switch_3_status = HOMEKIT_CHARACTERISTIC_(ON, false,
+  .getter=switch_3_on_get,
+  .setter=switch_3_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 3
+// END Switch 3
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 4
 //-------------------------------------------------------------------
 
-void bulb_4_on_set(homekit_value_t value) {
+void switch_4_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -188,40 +111,24 @@ void bulb_4_on_set(homekit_value_t value) {
   set_status(3, value.bool_value); 
 }
 
-homekit_value_t bulb_4_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(3));
+homekit_value_t switch_4_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(3));
 }
 
-void switch_4_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(3, value.int_value);
-}
-
-homekit_value_t bulb_4_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(3));
-}
-
-homekit_characteristic_t bulb_4_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_4_on_get,
-  .setter=bulb_4_on_set
-);
-
-homekit_characteristic_t bulb_4_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_4_brightness_get,
-  .setter=switch_4_brightness_set
+homekit_characteristic_t switch_4_status = HOMEKIT_CHARACTERISTIC_(ON, false,
+  .getter=switch_4_on_get,
+  .setter=switch_4_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 4
+// END Switch 4
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 5
 //-------------------------------------------------------------------
 
-void bulb_5_on_set(homekit_value_t value) {
+void switch_5_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -229,40 +136,24 @@ void bulb_5_on_set(homekit_value_t value) {
   set_status(4, value.bool_value); 
 }
 
-homekit_value_t bulb_5_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(4));
+homekit_value_t switch_5_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(4));
 }
 
-void switch_5_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(4, value.int_value);
-}
-
-homekit_value_t bulb_5_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(4));
-}
-
-homekit_characteristic_t bulb_5_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_5_on_get,
-  .setter=bulb_5_on_set
-);
-
-homekit_characteristic_t bulb_5_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_5_brightness_get,
-  .setter=switch_5_brightness_set
+homekit_characteristic_t switch_5_status = HOMEKIT_CHARACTERISTIC_(ON, false,
+  .getter=switch_5_on_get,
+  .setter=switch_5_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 5
+// END Switch 5
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 6
 //-------------------------------------------------------------------
 
-void bulb_6_on_set(homekit_value_t value) {
+void switch_6_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -270,40 +161,24 @@ void bulb_6_on_set(homekit_value_t value) {
   set_status(5, value.bool_value); 
 }
 
-homekit_value_t bulb_6_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(5));
+homekit_value_t switch_6_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(5));
 }
 
-void switch_6_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(5, value.int_value);
-}
-
-homekit_value_t bulb_6_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(5));
-}
-
-homekit_characteristic_t bulb_6_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_6_on_get,
-  .setter=bulb_6_on_set
-);
-
-homekit_characteristic_t bulb_6_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_6_brightness_get,
-  .setter=switch_6_brightness_set
+homekit_characteristic_t switch_6_status = HOMEKIT_CHARACTERISTIC_(ON, false,
+  .getter=switch_6_on_get,
+  .setter=switch_6_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 6
+// END Switch 6
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 7
 //-------------------------------------------------------------------
 
-void bulb_7_on_set(homekit_value_t value) {
+void switch_7_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -311,40 +186,24 @@ void bulb_7_on_set(homekit_value_t value) {
   set_status(6, value.bool_value); 
 }
 
-homekit_value_t bulb_7_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(6));
+homekit_value_t switch_7_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(6));
 }
 
-void switch_7_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(6, value.int_value);
-}
-
-homekit_value_t bulb_7_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(6));
-}
-
-homekit_characteristic_t bulb_7_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_7_on_get,
-  .setter=bulb_7_on_set
-);
-
-homekit_characteristic_t bulb_7_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_7_brightness_get,
-  .setter=switch_7_brightness_set
+homekit_characteristic_t switch_7_status = HOMEKIT_CHARACTERISTIC_(ON, false,
+  .getter=switch_7_on_get,
+  .setter=switch_7_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 7
+// END Switch 7
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 8
 //-------------------------------------------------------------------
 
-void bulb_8_on_set(homekit_value_t value) {
+void switch_8_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -352,40 +211,24 @@ void bulb_8_on_set(homekit_value_t value) {
   set_status(7, value.bool_value); 
 }
 
-homekit_value_t bulb_8_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(7));
+homekit_value_t switch_8_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(7));
 }
 
-void switch_8_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(7, value.int_value);
-}
-
-homekit_value_t bulb_8_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(7));
-}
-
-homekit_characteristic_t bulb_8_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_8_on_get,
-  .setter=bulb_8_on_set
-);
-
-homekit_characteristic_t bulb_8_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_8_brightness_get,
-  .setter=switch_8_brightness_set
+homekit_characteristic_t switch_8_status = HOMEKIT_CHARACTERISTIC_(ON, false,
+  .getter=switch_8_on_get,
+  .setter=switch_8_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 8
+// END Switch 8
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 9
 //-------------------------------------------------------------------
 
-void bulb_9_on_set(homekit_value_t value) {
+void switch_9_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -393,40 +236,24 @@ void bulb_9_on_set(homekit_value_t value) {
   set_status(8, value.bool_value); 
 }
 
-homekit_value_t bulb_9_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(8));
+homekit_value_t switch_9_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(8));
 }
 
-void switch_9_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(8, value.int_value);
-}
-
-homekit_value_t bulb_9_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(8));
-}
-
-homekit_characteristic_t bulb_9_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_9_on_get,
-  .setter=bulb_9_on_set
-);
-
-homekit_characteristic_t bulb_9_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_9_brightness_get,
-  .setter=switch_9_brightness_set
+homekit_characteristic_t switch_9_status = HOMEKIT_CHARACTERISTIC_(ON, false,
+  .getter=switch_9_on_get,
+  .setter=switch_9_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 9
+// END Switch 9
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 10
 //-------------------------------------------------------------------
 
-void bulb_10_on_set(homekit_value_t value) {
+void switch_10_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -434,40 +261,24 @@ void bulb_10_on_set(homekit_value_t value) {
   set_status(9, value.bool_value); 
 }
 
-homekit_value_t bulb_10_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(9));
+homekit_value_t switch_10_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(9));
 }
 
-void switch_10_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(9, value.int_value);
-}
-
-homekit_value_t bulb_10_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(9));
-}
-
-homekit_characteristic_t bulb_10_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_10_on_get,
-  .setter=bulb_10_on_set
-);
-
-homekit_characteristic_t bulb_10_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_10_brightness_get,
-  .setter=switch_10_brightness_set
+homekit_characteristic_t switch_10_status = HOMEKIT_CHARACTERISTIC_(ON, false,
+  .getter=switch_10_on_get,
+  .setter=switch_10_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 10
+// END Switch 10
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 11
 //-------------------------------------------------------------------
 
-void bulb_11_on_set(homekit_value_t value) {
+void switch_11_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -475,40 +286,24 @@ void bulb_11_on_set(homekit_value_t value) {
   set_status(10, value.bool_value); 
 }
 
-homekit_value_t bulb_11_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(10));
+homekit_value_t switch_11_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(10));
 }
 
-void switch_11_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(10, value.int_value);
-}
-
-homekit_value_t bulb_11_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(10));
-}
-
-homekit_characteristic_t bulb_11_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_11_on_get,
-  .setter=bulb_11_on_set
-);
-
-homekit_characteristic_t bulb_11_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_11_brightness_get,
-  .setter=switch_11_brightness_set
+homekit_characteristic_t switch_11_status = HOMEKIT_CHARACTERISTIC_(ON, false,
+  .getter=switch_11_on_get,
+  .setter=switch_11_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 11
+// END Switch 11
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 12
 //-------------------------------------------------------------------
 
-void bulb_12_on_set(homekit_value_t value) {
+void switch_12_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -516,40 +311,24 @@ void bulb_12_on_set(homekit_value_t value) {
   set_status(11, value.bool_value); 
 }
 
-homekit_value_t bulb_12_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(11));
+homekit_value_t switch_12_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(11));
 }
 
-void switch_12_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(11, value.int_value);
-}
-
-homekit_value_t bulb_12_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(11));
-}
-
-homekit_characteristic_t bulb_12_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_12_on_get,
-  .setter=bulb_12_on_set
-);
-
-homekit_characteristic_t bulb_12_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_12_brightness_get,
-  .setter=switch_12_brightness_set
+homekit_characteristic_t switch_12_status = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, false,
+  .getter=switch_12_on_get,
+  .setter=switch_12_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 12
+// END Switch 12
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 13
 //-------------------------------------------------------------------
 
-void bulb_13_on_set(homekit_value_t value) {
+void switch_13_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -557,40 +336,24 @@ void bulb_13_on_set(homekit_value_t value) {
   set_status(12, value.bool_value); 
 }
 
-homekit_value_t bulb_13_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(12));
+homekit_value_t switch_13_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(12));
 }
 
-void switch_13_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(12, value.int_value);
-}
-
-homekit_value_t bulb_13_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(12));
-}
-
-homekit_characteristic_t bulb_13_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_13_on_get,
-  .setter=bulb_13_on_set
-);
-
-homekit_characteristic_t bulb_13_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_13_brightness_get,
-  .setter=switch_13_brightness_set
+homekit_characteristic_t switch_13_status = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, false,
+  .getter=switch_13_on_get,
+  .setter=switch_13_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 13
+// END Switch 13
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 14
 //-------------------------------------------------------------------
 
-void bulb_14_on_set(homekit_value_t value) {
+void switch_14_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -598,40 +361,24 @@ void bulb_14_on_set(homekit_value_t value) {
   set_status(13, value.bool_value); 
 }
 
-homekit_value_t bulb_14_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(13));
+homekit_value_t switch_14_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(13));
 }
 
-void switch_14_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(13, value.int_value);
-}
-
-homekit_value_t bulb_14_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(13));
-}
-
-homekit_characteristic_t bulb_14_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_14_on_get,
-  .setter=bulb_14_on_set
-);
-
-homekit_characteristic_t bulb_14_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_14_brightness_get,
-  .setter=switch_14_brightness_set
+homekit_characteristic_t switch_14_status = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, false,
+  .getter=switch_14_on_get,
+  .setter=switch_14_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 14
+// END Switch 14
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 15
 //-------------------------------------------------------------------
 
-void bulb_15_on_set(homekit_value_t value) {
+void switch_15_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -639,40 +386,24 @@ void bulb_15_on_set(homekit_value_t value) {
   set_status(14, value.bool_value); 
 }
 
-homekit_value_t bulb_15_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(14));
+homekit_value_t switch_15_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(14));
 }
 
-void switch_15_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(14, value.int_value);
-}
-
-homekit_value_t bulb_15_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(14));
-}
-
-homekit_characteristic_t bulb_15_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_15_on_get,
-  .setter=bulb_15_on_set
-);
-
-homekit_characteristic_t bulb_15_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_15_brightness_get,
-  .setter=switch_15_brightness_set
+homekit_characteristic_t switch_15_status = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, false,
+  .getter=switch_15_on_get,
+  .setter=switch_15_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 15
+// END Switch 15
 //-------------------------------------------------------------------
 
 //-------------------------------------------------------------------
 // Bulb 16
 //-------------------------------------------------------------------
 
-void bulb_16_on_set(homekit_value_t value) {
+void switch_16_on_set(homekit_value_t value) {
   if (value.format != homekit_format_bool) {
     printf("Invalid on-value format: %d\n", value.format);
     return;
@@ -680,33 +411,17 @@ void bulb_16_on_set(homekit_value_t value) {
   set_status(15, value.bool_value); 
 }
 
-homekit_value_t bulb_16_on_get() {
-  return HOMEKIT_BOOL(get_bulb_status(15));
+homekit_value_t switch_16_on_get() {
+  return HOMEKIT_BOOL(get_switch_status(15));
 }
 
-void switch_16_brightness_set(homekit_value_t value) {
-  if (value.format != homekit_format_int) {
-    return;
-  }
-  set_brightness(15, value.int_value);
-}
-
-homekit_value_t bulb_16_brightness_get() {
-  return HOMEKIT_INT(get_bulb_brightness(15));
-}
-
-homekit_characteristic_t bulb_16_status = HOMEKIT_CHARACTERISTIC_(ON, false,
-  .getter=bulb_16_on_get,
-  .setter=bulb_16_on_set
-);
-
-homekit_characteristic_t bulb_16_brightness = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 0,
-  .getter=bulb_16_brightness_get,
-  .setter=switch_16_brightness_set
+homekit_characteristic_t switch_16_status = HOMEKIT_CHARACTERISTIC_(MOTION_DETECTED, false,
+  .getter=switch_16_on_get,
+  .setter=switch_16_on_set
 );
 
 //-------------------------------------------------------------------
-// END Bulb 16
+// END Switch 16
 //-------------------------------------------------------------------
 
 
@@ -751,10 +466,10 @@ void accessory_identify(homekit_value_t _value) {
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_switch, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart 16 Channels LED Controller"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Smart 16 Channels Switcher"),
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "Rancho P&R Smart Experience by fabiotomio"),
-            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "7890000000002"),
-            HOMEKIT_CHARACTERISTIC(MODEL, "16 channels"),
+            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "7890000000003"),
+            HOMEKIT_CHARACTERISTIC(MODEL, "16 channels switcher"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "1.0.0"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
@@ -763,224 +478,208 @@ homekit_accessory_t *accessories[] = {
     }),
     HOMEKIT_ACCESSORY(.id=2, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 1"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 1"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            &bulb_1_status,
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 1"),
-            &bulb_1_brightness,
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            &switch_1_status,
+            HOMEKIT_CHARACTERISTIC(NAME, "Switch 1"),
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=3, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 2"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 2"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            &bulb_2_status,
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 2"),
-            &bulb_2_brightness,
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            &switch_2_status,
+            HOMEKIT_CHARACTERISTIC(NAME, "Switch 2"),
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=4, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 3"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 3"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            &bulb_3_status,
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 3"),
-            &bulb_3_brightness,
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            &switch_3_status,
+            HOMEKIT_CHARACTERISTIC(NAME, "Switch 3"),
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=5, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 4"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 4"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            &bulb_4_status,
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 4"),
-            &bulb_4_brightness,
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            &switch_4_status,
+            HOMEKIT_CHARACTERISTIC(NAME, "Switch 4"),
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=6, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 5"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 5"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 5"),
-            &bulb_5_status,
-            &bulb_5_brightness,
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            HOMEKIT_CHARACTERISTIC(NAME, "Switch 5"),
+            &switch_5_status,
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=7, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 6"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 6"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 6"),
-            &bulb_6_status,
-            &bulb_6_brightness,
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            HOMEKIT_CHARACTERISTIC(NAME, "Switch 6"),
+            &switch_6_status,
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=8, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 7"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 7"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 7"),
-            &bulb_7_status,
-            &bulb_7_brightness,
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            HOMEKIT_CHARACTERISTIC(NAME, "Switch 7"),
+            &switch_7_status,
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=9, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 8"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 8"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 8"),
-            &bulb_8_status,
-            &bulb_8_brightness,
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            HOMEKIT_CHARACTERISTIC(NAME, "Switch 8"),
+            &switch_8_status,
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=10, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 8"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 8"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 9"),
-            &bulb_9_status,
-            &bulb_9_brightness,
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            HOMEKIT_CHARACTERISTIC(NAME, "Switch 9"),
+            &switch_9_status,
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=11, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 10"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 10"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            &bulb_10_status,
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 10"),
-            &bulb_10_brightness,
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            &switch_10_status,
+            HOMEKIT_CHARACTERISTIC(NAME, "Switch 10"),
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=12, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 11"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 11"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            &bulb_11_status,
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 11"),
-            &bulb_11_brightness,
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            &switch_11_status,
+            HOMEKIT_CHARACTERISTIC(NAME, "Switch 11"),
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=13, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 12"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 12"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            &bulb_12_status,
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 12"),
-            &bulb_12_brightness,
+        HOMEKIT_SERVICE(MOTION_SENSOR, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            &switch_12_status,
+            HOMEKIT_CHARACTERISTIC(NAME, "Motion Sensor 1"),
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=14, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 13"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 13"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            &bulb_13_status,
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 13"),
-            &bulb_13_brightness,
+        HOMEKIT_SERVICE(MOTION_SENSOR, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            &switch_13_status,
+            HOMEKIT_CHARACTERISTIC(NAME, "Motion Sensor 2"),
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=15, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 14"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 14"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            &bulb_14_status,
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 14"),
-            &bulb_14_brightness,
+        HOMEKIT_SERVICE(MOTION_SENSOR, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            &switch_14_status,
+            HOMEKIT_CHARACTERISTIC(NAME, "Motion Sensor 3"),
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=16, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 15"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 15"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            &bulb_15_status,
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 15"),
-            &bulb_15_brightness,
+        HOMEKIT_SERVICE(MOTION_SENSOR, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            &switch_15_status,
+            HOMEKIT_CHARACTERISTIC(NAME, "Motion Sensor 4"),
             NULL
         }),
         NULL
     }),
     HOMEKIT_ACCESSORY(.id=17, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Smart Bulb Channel 16"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Switcher Channel 16"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, accessory_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            &bulb_16_status,
-            HOMEKIT_CHARACTERISTIC(NAME, "Bulb 16"),
-            &bulb_16_brightness,
+        HOMEKIT_SERVICE(MOTION_SENSOR, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            &switch_16_status,
+            HOMEKIT_CHARACTERISTIC(NAME, "Motion Sensor 5"),
             NULL
         }),
         NULL
@@ -990,6 +689,6 @@ homekit_accessory_t *accessories[] = {
 
 homekit_server_config_t config = {
     .accessories = accessories,
-    .password = "461-33-000",
+    .password = "461-33-123",
     .setupId = "ABCD"
 };

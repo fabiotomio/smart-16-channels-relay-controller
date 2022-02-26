@@ -1,7 +1,7 @@
-# Smart 16 channels led controller
+# Smart 16 channels switcher
 
-## 2021/12/21
-- Adicionado suporte ao PCA9685 para adiciona o suporte a 16 portas PWM
+## 2022/02/26
+- Adicionado suporte ao multiplex
 
 
 ## 2021/04/14
@@ -10,9 +10,9 @@
 - O pino Flash, é para gerenciar o acesso ao flash do ESP, não consegui utilizar como OUTPUT.
 - O mesmo MAC Address faz com que o DHCP Server entregue o mesmo IP para o dispositivo.
 
-# ESP8266 Arduino HomeKit Switch Controller
+# ESP8266 Arduino HomeKit Switcher
 
-> Using an ESP8266 as a 16 channels led controller with native Apple HomeKit support
+> Using an ESP8266 as a 16 channels switcher with native Apple HomeKit support
 
 ## Start/Setup
 
@@ -25,7 +25,7 @@ Configure your wifi credentials in switch.ino, build and updload to EPS8266 boar
 homekit_server_config_t config = {
     .accessories = accessories,
 -    .password = "111-11-111",
-+    .password = "461-33-000",
++    .password = "461-33-123",
     .setupId = "ABCD"
 };
 ```
